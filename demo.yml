@@ -1,0 +1,10 @@
+---
+- name: Demo playbook
+  hosts: all
+  become: False
+  gather_facts: False
+  vars_files:
+    - gagarin_bmc
+  tasks:
+  - ansible.builtin.debug:
+      msg: "Demo message {{ gb_user }}"
