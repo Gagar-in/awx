@@ -1,0 +1,4 @@
+plugin: constructed
+strict: False
+groups:
+  hosts: "'host_' in inventory_hostname"
