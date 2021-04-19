@@ -11,7 +11,7 @@
     community.general.redfish_info:
       category: Systems
       command: GetCpuInventory
-      baseuri: "{{ baseuri }}"
+      baseuri: "{{ ip }}"
       username: "{{ username }}"
       password: "{{ password }}"
     register: cpu_result
@@ -21,7 +21,7 @@
     community.general.redfish_info:
       category: Systems
       command: GetMemoryInventory
-      baseuri: "{{ baseuri }}"
+      baseuri: "{{ ip }}"
       username: "{{ username }}"
       password: "{{ password }}"
     register: mem_result
@@ -29,7 +29,7 @@
       msg: "{{ mem_result.redfish_facts.memory.entries | to_nice_json }}"
   - name: Get default inventory information
     community.general.redfish_info:
-      baseuri: "{{ baseuri }}"
+      baseuri: "{{ ip }}"
       username: "{{ username }}"
       password: "{{ password }}"
     register: gen_result
