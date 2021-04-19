@@ -1,0 +1,109 @@
+---
+- name: Install basic packages and utilities and prepare test environment
+  hosts: hosts
+  become: True
+  vars_files:
+    - gagarin_bmc
+  tasks:
+  - name: Update existing packages to their latest versions
+    yum:
+      name: '*'
+      state: latest
+  - name: Install EPEL repo
+    yum:
+      name: epel-release 
+      state: latest
+  - name: Install basic system utilities and tests with prerequisites
+    yum:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - usbutils
+      - pciutils
+      - dmidecode
+      - lm_sensors
+      - sysbench
+      - iperf3
+      - stress-ng
+      - fio
+      - php-cli
+      - php-xml
+      - php-json
+      - expect
+      - python3-pexpect
+  - name: Create tests directory
+    file:
+      path: /home/ansible/tests
+      state: directory
+      owner: ansible
+      group: ansible
+  - name: Fetching Linpack
+    unarchive:
+#      src: https://software.intel.com/content/dam/develop/external/us/en/documents/l_mklb_p_2021.1.1.001.tgz
+      src: "http://{{ data_ip }}/l_mklb_p_2021.1.1.001.tgz"
+      remote_src: yes
+      dest: /home/ansible/tests
+      owner: ansible
+      group: ansible
+  - name: Run async Linpack test
+    command: 
+      cmd: ./runme_xeon64
+      chdir: /home/ansible/tests/l_mklb_p_2021.1.1.001/benchmarks_2021.1.1/linux/mkl/benchmarks/linpack/
+      creates: lin_xeon64.txt
+    async: 600
+    poll: 15
+  - name: Fetching Geekbench v3
+    unarchive:
+#      src: https://cdn.geekbench.com/Geekbench-5.4.0-Linux.tar.gz
+#      src: "http://{{ data_ip }}/Geekbench-5.4.0-Linux.tar.gz"
+      src: "http://{{ data_ip }}/Geekbench-3.4.2-Linux.tar.gz"
+      remote_src: yes
+      dest: /home/ansible/tests
+      owner: ansible
+      group: ansible
+  - name: Register Geekbench
+    command: 
+      cmd: ./geekbench_x86_64 --unlock "{{ gb_user }}" "{{ gb_pass }}"
+      chdir: /home/ansible/tests/dist/Geekbench-3.4.2-Linux 
+    no_log: true
+  - name: Run async Geekbench test
+    command: 
+      cmd: ./geekbench_x86_64 --save gb_report.txt --export-html gb_report.html --no-upload
+      chdir: /home/ansible/tests/dist/Geekbench-3.4.2-Linux
+      creates: gb_report.txt
+    async: 600
+    poll: 15
+  - name: Run Sysbench memory test
+    shell: 
+      cmd: sysbench memory run | tee sysbench.txt
+      chdir: /home/ansible/tests
+      creates: sysbench.txt
+    async: 60
+    poll: 5
+  - name: Run Iperf3 network test
+    shell: 
+      cmd: iperf3 -i 10 -w 100K -t 60 -c "{{ test_ip }}" | tee iperf3.txt
+      chdir: /home/ansible/tests
+      creates: iperf3.txt
+    async: 90
+    poll: 5
+  - name: Fetching Phoronix test suite
+    unarchive:
+#      src: https://phoronix-test-suite.com/releases/phoronix-test-suite-9.4.1.tar.gz
+      src: "http://{{ data_ip }}/phoronix-test-suite-9.4.1.tar.gz"
+      remote_src: yes
+      dest: /home/ansible/tests
+      owner: ansible
+      group: ansible
+  - name: Install Phoronix
+    command: 
+      cmd: ./install-sh
+      chdir: /home/ansible/tests/phoronix-test-suite
+      creates: /usr/bin/phoronix-test-suite
+  - name: Register Phoronix
+    expect: 
+      command: phoronix-test-suite openbenchmarking-login
+      responses:
+        (?i)User-Name: "{{ pts_user }}"
+        (?i)Password: "{{ pts_pass }}"
+    no_log: true
