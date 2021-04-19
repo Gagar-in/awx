@@ -40,7 +40,7 @@
   - name: Fetching Linpack
     unarchive:
 #      src: https://software.intel.com/content/dam/develop/external/us/en/documents/l_mklb_p_2021.1.1.001.tgz
-      src: "http://{{ data_ip }}/l_mklb_p_2021.1.1.001.tgz"
+      src: "http://{{ data_ip }}:8080/l_mklb_p_2021.1.1.001.tgz"
       remote_src: yes
       dest: /home/ansible/tests
       owner: ansible
@@ -49,7 +49,7 @@
     unarchive:
 #      src: https://cdn.geekbench.com/Geekbench-5.4.0-Linux.tar.gz
 #      src: "http://{{ data_ip }}/Geekbench-5.4.0-Linux.tar.gz"
-      src: "http://{{ data_ip }}/Geekbench-3.4.2-Linux.tar.gz"
+      src: "http://{{ data_ip }}:8080/Geekbench-3.4.2-Linux.tar.gz"
       remote_src: yes
       dest: /home/ansible/tests
       owner: ansible
@@ -62,7 +62,7 @@
   - name: Fetching Phoronix test suite
     unarchive:
 #      src: https://phoronix-test-suite.com/releases/phoronix-test-suite-9.4.1.tar.gz
-      src: "http://{{ data_ip }}/phoronix-test-suite-9.4.1.tar.gz"
+      src: "http://{{ data_ip }}:8080/phoronix-test-suite-9.4.1.tar.gz"
       remote_src: yes
       dest: /home/ansible/tests
       owner: ansible
