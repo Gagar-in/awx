@@ -1,6 +1,6 @@
 ---
 - name: Demo playbook
-  hosts: all
+  hosts: hosts
   become: False
   gather_facts: False
   vars_files:
