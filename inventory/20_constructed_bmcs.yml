@@ -1,4 +1,0 @@
-plugin: constructed
-strict: False
-groups:
-  bmcs: "'bmc_' in inventory_hostname"

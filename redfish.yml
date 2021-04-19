@@ -1,6 +1,6 @@
 ---
 - name: Work with Gagarin BMC via Redfish
-  hosts: BMC
+  hosts: bmcs
   remote_user: root
   become: False
   gather_facts: False
