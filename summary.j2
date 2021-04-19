@@ -6,7 +6,7 @@ Model: {{ gen_result.redfish_facts.system.entries.0.1.Model }}
 Serial Number: {{ gen_result.redfish_facts.system.entries.0.1.SerialNumber }}
 Part Number: {{ gen_result.redfish_facts.system.entries.0.1.PartNumber }}
 UEFI version: {{ gen_result.redfish_facts.system.entries.0.1.BiosVersion }}
-Total memory: {{ gen_result.redfish_facts.system.entries.0.1.MemorySummary.Total                                                                                                SystemMemoryGiB }} GiB Overall Memory Health: {{ gen_result.redfish_facts.system.entries.0.1.MemorySummary.Status.Health }} 
+Total memory: {{ gen_result.redfish_facts.system.entries.0.1.MemorySummary.TotalSystemMemoryGiB }} GiB Overall Memory Health: {{ gen_result.redfish_facts.system.entries.0.1.MemorySummary.Status.Health }} 
 CPUs: {{ gen_result.redfish_facts.system.entries.0.1.ProcessorSummary.Count }} x {{ gen_result.redfish_facts.system.entries.0.1.ProcessorSummary.Model }}
 Overall CPU Health: {{ gen_result.redfish_facts.system.entries.0.1.ProcessorSummary.Status.Health }}
 System Health: {{ gen_result.redfish_facts.system.entries.0.1.Status.Health }}
