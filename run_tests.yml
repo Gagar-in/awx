@@ -1,0 +1,35 @@
+---
+- name: Install basic packages and utilities and prepare test environment
+  hosts: hosts
+  become: True
+  vars_files:
+    - gagarin_bmc
+  tasks:
+  - name: Run async Linpack test
+    command: 
+      cmd: ./runme_xeon64
+      chdir: /home/ansible/tests/l_mklb_p_2021.1.1.001/benchmarks_2021.1.1/linux/mkl/benchmarks/linpack/
+      creates: lin_xeon64.txt
+    async: 600
+    poll: 15
+  - name: Run async Geekbench test
+    command: 
+      cmd: ./geekbench_x86_64 --save gb_report.txt --export-html gb_report.html --no-upload
+      chdir: /home/ansible/tests/dist/Geekbench-3.4.2-Linux
+      creates: gb_report.txt
+    async: 600
+    poll: 15
+  - name: Run Sysbench memory test
+    shell: 
+      cmd: sysbench memory run | tee sysbench.txt
+      chdir: /home/ansible/tests
+      creates: sysbench.txt
+    async: 60
+    poll: 5
+  - name: Run Iperf3 network test
+    shell: 
+      cmd: iperf3 -i 10 -w 100K -t 60 -c "{{ test_ip }}" | tee iperf3.txt
+      chdir: /home/ansible/tests
+      creates: iperf3.txt
+    async: 90
+    poll: 5
