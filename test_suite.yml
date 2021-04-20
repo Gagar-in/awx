@@ -31,10 +31,23 @@
       - php-xml
       - php-json
       - expect
-      - python3-pexpect
       - unzip
       - tar
       - vim-enhanced
+      - httpd
+  - name: Install Python expect module for CentOS 7
+    yum: 
+      name: pexpect 
+      state: present
+    when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'
+    tags: pexpect
+  - name: Install Python expect module for CentOS 8 and Fedora
+    yum:
+      name: python3-pexpect 
+      state: present
+    when: 
+      - (ansible_distribution == 'CentOS' and ansible_distribution_major_version == '8') or ansible_distribution == 'Fedora'
+    tags: pexpect
   - name: Create tests directory
     file:
       path: /home/ansible/tests
@@ -76,10 +89,12 @@
       cmd: ./install-sh
       chdir: /home/ansible/tests/phoronix-test-suite
       creates: /usr/bin/phoronix-test-suite
-  - name: Register Phoronix
-    expect: 
-      command: phoronix-test-suite openbenchmarking-login
-      responses:
-        (?i)User-Name: "{{ pts_user }}"
-        (?i)Password: "{{ pts_pass }}"
-    no_log: true
+#  - name: Register Phoronix
+#    expect: 
+#      command: phoronix-test-suite openbenchmarking-login
+#      responses:
+#        (?i)User-Name: "{{ pts_user }}"
+#        (?i)Password: "{{ pts_pass }}"
+#    no_log: true
+#    vars:
+#      ansible_python_interpreter: /usr/bin/python

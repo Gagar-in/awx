@@ -12,11 +12,12 @@
       creates: lin_xeon64.txt
     async: 600
     poll: 15
+    when: False
   - name: Run async Geekbench test
     command: 
-      cmd: ./geekbench_x86_64 --save gb_report.txt --export-html gb_report.html --no-upload
+      cmd: ./geekbench_x86_64 --save gb_report.txt --export-html /var/www/html/geekbench.html --no-upload
       chdir: /home/ansible/tests/dist/Geekbench-3.4.2-Linux
-      creates: gb_report.txt
+      creates: /var/www/html/geekbench.html
     async: 600
     poll: 15
   - name: Run Sysbench memory test
@@ -26,6 +27,7 @@
       creates: sysbench.txt
     async: 60
     poll: 5
+    when: False
   - name: Run Iperf3 network test
     shell: 
       cmd: iperf3 -i 10 -w 100K -t 60 -c "{{ test_ip }}" | tee iperf3.txt
@@ -33,3 +35,9 @@
       creates: iperf3.txt
     async: 90
     poll: 5
+    when: False
+  - name: Enable and start Apache to show report
+    systemd:
+      name: httpd
+      state: started
+      enabled: True
