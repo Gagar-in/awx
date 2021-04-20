@@ -1,0 +1,40 @@
+---
+- name: Initiate host installation via PXE boot
+  hosts: bmcs
+  remote_user: root
+  become: False
+  gather_facts: False
+  vars_files:
+    - gagarin_bmc
+  tasks:
+  - name: Get current boot order
+    community.general.redfish_info:
+      category: Systems
+      command: GetBootOrder
+      baseuri: "{{ ip }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+  - name: Get current boot override
+    community.general.redfish_info:
+      category: Systems
+      command: GetBootOverride
+      baseuri: "{{ ip }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+  - name: Set one-time boot device to "Pxe"
+    community.general.redfish_command:
+      category: Systems
+      command: SetOneTimeBoot
+      bootdevice: "Pxe"
+      baseuri: "{{ ip }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+  - name: Restart system power forcefully
+    community.general.redfish_command:
+      category: Systems
+      command: PowerForceRestart
+      baseuri: "{{ ip }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+    tags:
+      - reboot
