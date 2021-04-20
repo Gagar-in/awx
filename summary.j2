@@ -2,23 +2,23 @@
 ############### General system information ###############
 ##########################################################
 
-BMC IP address:..... {{ inventory_hostname }}
-Manufacturer:....... {{ gen_result.redfish_facts.system.entries.0.1.Manufacturer }}
-Model:...............{{ gen_result.redfish_facts.system.entries.0.1.Model }}
-Serial Number:.......{{ gen_result.redfish_facts.system.entries.0.1.SerialNumber }}
-Part Number:.........{{ gen_result.redfish_facts.system.entries.0.1.PartNumber }}
-UEFI version:........{{ gen_result.redfish_facts.system.entries.0.1.BiosVersion }}
-Total memory:........{{ gen_result.redfish_facts.system.entries.0.1.MemorySummary.TotalSystemMemoryGiB }} GiB Overall Memory Health: {{ gen_result.redfish_facts.system.entries.0.1.MemorySummary.Status.Health }} 
-CPUs:................{{ gen_result.redfish_facts.system.entries.0.1.ProcessorSummary.Count }} x {{ gen_result.redfish_facts.system.entries.0.1.ProcessorSummary.Model }}
-Overall CPU Health:..{{ gen_result.redfish_facts.system.entries.0.1.ProcessorSummary.Status.Health }}
-System Health:.......{{ gen_result.redfish_facts.system.entries.0.1.Status.Health }}
+BMC IP address ..... {{ inventory_hostname }}
+Manufacturer ....... {{ gen_result.redfish_facts.system.entries.0.1.Manufacturer }}
+Model .............. {{ gen_result.redfish_facts.system.entries.0.1.Model }}
+Serial Number ...... {{ gen_result.redfish_facts.system.entries.0.1.SerialNumber }}
+Part Number ........ {{ gen_result.redfish_facts.system.entries.0.1.PartNumber }}
+UEFI version ....... {{ gen_result.redfish_facts.system.entries.0.1.BiosVersion }}
+Total memory ....... {{ gen_result.redfish_facts.system.entries.0.1.MemorySummary.TotalSystemMemoryGiB }} GiB Overall Memory Health: {{ gen_result.redfish_facts.system.entries.0.1.MemorySummary.Status.Health }} 
+CPUs ............... {{ gen_result.redfish_facts.system.entries.0.1.ProcessorSummary.Count }} x {{ gen_result.redfish_facts.system.entries.0.1.ProcessorSummary.Model }}
+Overall CPU Health . {{ gen_result.redfish_facts.system.entries.0.1.ProcessorSummary.Status.Health }}
+System Health ...... {{ gen_result.redfish_facts.system.entries.0.1.Status.Health }}
 
 ##########################################################
 ############### Detailed CPU information #################
 ##########################################################
 
 {% for row in cpu_result.redfish_facts.cpu.entries.0.1 %}
-{{ row.Id }} {{ row.MaxSpeedMHz }} MHz {{ row.TotalCores }} cores {{ row.TotalThreads }} threads
+{{ row.Id }} {{ row.MaxSpeedMHz }} MHz {{ row.TotalCores }} cores {{ row.TotalThreads }} threads     Status: {{ row.Status.Health }}
 {% endfor %}
 
 ##########################################################
@@ -26,6 +26,6 @@ System Health:.......{{ gen_result.redfish_facts.system.entries.0.1.Status.Healt
 ##########################################################
 
 {% for row in mem_result.redfish_facts.memory.entries.0.1 %}
-{{ row.Id }} {{ row.CapacityMiB }} Mib {{ row.MemoryDeviceType }} {{ row.Manufacturer }}
+{{ row.Id }} {{ row.CapacityMiB }} Mib {{ row.MemoryDeviceType }} {{ row.Manufacturer }}     Status: {{ row.Status.Health }}
 {% endfor %}
 
