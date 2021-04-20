@@ -13,6 +13,7 @@
     yum:
       name: epel-release 
       state: latest
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat'
   - name: Install basic system utilities and tests with prerequisites
     yum:
       name: "{{ item }}"
@@ -31,6 +32,9 @@
       - php-json
       - expect
       - python3-pexpect
+      - unzip
+      - tar
+      - vim-enhanced
   - name: Create tests directory
     file:
       path: /home/ansible/tests
