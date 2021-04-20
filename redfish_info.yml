@@ -38,5 +38,5 @@
   - name: Output summary
     template:
       src: summary.j2
-      dest: "{{ inventory_hostname }}.txt"
+      dest: "/tmp/{{ inventory_hostname }}.txt"
 
