@@ -64,17 +64,23 @@
       group: ansible
   - name: Fetching Geekbench v3
     unarchive:
-#      src: https://cdn.geekbench.com/Geekbench-5.4.0-Linux.tar.gz
-#      src: "http://{{ data_ip }}/Geekbench-5.4.0-Linux.tar.gz"
       src: "http://{{ data_ip }}/Geekbench-3.4.2-Linux.tar.gz"
       remote_src: yes
-      dest: /home/ansible/tests
-      owner: ansible
-      group: ansible
-  - name: Register Geekbench
+      dest: /opt/tests
+  - name: Register Geekbench v3
+    command: 
+      cmd: ./geekbench_x86_64 --unlock "{{ gb3_user }}" "{{ gb3_pass }}"
+      chdir: /opt/tests/dist/Geekbench-3.4.2-Linux 
+    no_log: true
+  - name: Fetching Geekbench v5
+    unarchive:
+#      src: "http://{{ data_ip }}/Geekbench-5.4.0-Linux.tar.gz"
+      remote_src: yes
+      dest: /opt/tests
+  - name: Register Geekbench v5
     command: 
       cmd: ./geekbench_x86_64 --unlock "{{ gb_user }}" "{{ gb_pass }}"
-      chdir: /home/ansible/tests/dist/Geekbench-3.4.2-Linux 
+      chdir: /opt/tests/dist/Geekbench-5.4.0-Linux 
     no_log: true
   - name: Fetching Phoronix test suite
     unarchive:
