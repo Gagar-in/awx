@@ -1,7 +1,7 @@
 ---
 - name: Initiate host installation via PXE boot
-#  hosts: bmcs
-  hosts: bmc_057
+  hosts: bmcs
+#  hosts: bmc_057
   remote_user: root
   become: False
   gather_facts: False
