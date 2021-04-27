@@ -27,6 +27,8 @@
       - iperf3
       - stress-ng
       - fio
+      - lsof
+      - smartmontools
       - php-cli
       - php-xml
       - php-json
@@ -50,7 +52,7 @@
     tags: pexpect
   - name: Create tests directory
     file:
-      path: /home/ansible/tests
+      path: /opt/tests
       state: directory
       owner: ansible
       group: ansible
@@ -59,7 +61,7 @@
 #      src: https://software.intel.com/content/dam/develop/external/us/en/documents/l_mklb_p_2021.1.1.001.tgz
       src: "http://{{ data_ip }}/l_mklb_p_2021.1.1.001.tgz"
       remote_src: yes
-      dest: /home/ansible/tests
+      dest: /opt/tests
       owner: ansible
       group: ansible
   - name: Fetching Geekbench v3
@@ -67,6 +69,8 @@
       src: "http://{{ data_ip }}/Geekbench-3.4.2-Linux.tar.gz"
       remote_src: yes
       dest: /opt/tests
+      owner: ansible
+      group: ansible
   - name: Register Geekbench v3
     command: 
       cmd: ./geekbench_x86_64 --unlock "{{ gb3_user }}" "{{ gb3_pass }}"
@@ -74,26 +78,28 @@
     no_log: true
   - name: Fetching Geekbench v5
     unarchive:
-#      src: "http://{{ data_ip }}/Geekbench-5.4.0-Linux.tar.gz"
+      src: "http://{{ data_ip }}/Geekbench-5.4.0-Linux.tar.gz"
       remote_src: yes
       dest: /opt/tests
+      owner: ansible
+      group: ansible
   - name: Register Geekbench v5
     command: 
-      cmd: ./geekbench_x86_64 --unlock "{{ gb_user }}" "{{ gb_pass }}"
-      chdir: /opt/tests/dist/Geekbench-5.4.0-Linux 
+      cmd: ./geekbench_x86_64 --unlock "{{ gb5_user }}" "{{ gb5_pass }}"
+      chdir: /opt/tests/Geekbench-5.4.0-Linux 
     no_log: true
   - name: Fetching Phoronix test suite
     unarchive:
 #      src: https://phoronix-test-suite.com/releases/phoronix-test-suite-9.4.1.tar.gz
       src: "http://{{ data_ip }}/phoronix-test-suite-9.4.1.tar.gz"
       remote_src: yes
-      dest: /home/ansible/tests
+      dest: /opt/tests
       owner: ansible
       group: ansible
   - name: Install Phoronix
     command: 
       cmd: ./install-sh
-      chdir: /home/ansible/tests/phoronix-test-suite
+      chdir: /opt/tests/phoronix-test-suite
       creates: /usr/bin/phoronix-test-suite
 #  - name: Register Phoronix
 #    expect: 
@@ -104,3 +110,12 @@
 #    no_log: true
 #    vars:
 #      ansible_python_interpreter: /usr/bin/python
+  - name: Prepare partitions for FIO tests
+    include_tasks: disk.yml
+    loop:
+      - a
+      - b
+      - c
+      - d
+    loop_control:
+      loop_var: dev_item

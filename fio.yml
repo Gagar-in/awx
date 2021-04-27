@@ -1,0 +1,14 @@
+---
+- name: Prepare partitions and run FIO tests
+  become: True
+  hosts: hosts
+  tasks:
+    - name: Prepare all available devices
+      include_tasks: disk.yml
+      loop:
+        - a
+        - b
+        - c
+        - d
+      loop_control:
+        loop_var: dev_item

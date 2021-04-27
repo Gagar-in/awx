@@ -1,5 +1,5 @@
 ---
-- name: Initiate host installation via PXE boot
+- name: Send Redfish command to enter UEFI
   hosts: bmcs
   remote_user: root
   become: False
@@ -14,11 +14,11 @@
       baseuri: "{{ ip }}"
       username: "{{ username }}"
       password: "{{ password }}"
-  - name: Set one-time boot device to "Pxe"
+  - name: Set one-time boot device to "BiosSetup"
     community.general.redfish_command:
       category: Systems
       command: SetOneTimeBoot
-      bootdevice: "Pxe"
+      bootdevice: "BiosSetup"
       baseuri: "{{ ip }}"
       username: "{{ username }}"
       password: "{{ password }}"

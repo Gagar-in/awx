@@ -1,0 +1,45 @@
+---
+- block:
+  - name: Unmount a mounted volume
+    mount:
+      path: "/mnt/disk_{{ dev_item }}"
+      state: unmounted
+  - name: Read "/dev/sd{{ dev_item }}" partitions information
+    parted: device="/dev/sd{{ dev_item }}" unit=MiB
+    register: "part_info" 
+  - name: Remove all partitions from "/dev/sd{{ dev_item }}"
+    parted:
+      device: "/dev/sd{{ dev_item }}"
+      number: "{{ item.num }}"
+      state: absent
+    with_items:
+     - "{{ part_info.partitions }}"
+  - name: Create a new primary partition with a size of 100GiB
+    parted:
+      device: "/dev/sd{{ dev_item }}"
+      number: 1
+      state: present
+      part_end: 100GiB
+  - name: Unmount a mounted volume
+    mount:
+      path: "/mnt/disk_{{ dev_item }}"
+      state: unmounted
+  - name: Create a XFS filesystem on "/dev/sd{{ dev_item }}1"
+    filesystem:
+      fstype: xfs
+      force: True
+      dev: "/dev/sd{{ dev_item }}1"
+  - name: Mount a filesystem
+    mount:
+      path: "/mnt/disk_{{ dev_item }}"
+      src: "/dev/sd{{ dev_item }}1"
+      fstype: xfs
+      state: mounted
+      boot: False
+      opts: nofail
+  - name: Write config for the test
+    template:
+      src: fio.j2
+      dest: /opt/tests/fio_{{ dev_item }}.ini
+  rescue:
+    - debug: msg="Error encountered while working with device /dev/sd{{ dev_item }}"
