@@ -1,6 +1,6 @@
 ---
 - block:
-  - name: Unmount a mounted volume
+  - name: Unmount a mounted volume /mnt/disk_{{ dev_item }}
     mount:
       path: "/mnt/disk_{{ dev_item }}"
       state: unmounted
@@ -20,7 +20,7 @@
       number: 1
       state: present
       part_end: 100GiB
-  - name: Unmount a mounted volume
+  - name: Unmount a mounted volume /mnt/disk_{{ dev_item }}
     mount:
       path: "/mnt/disk_{{ dev_item }}"
       state: unmounted
@@ -29,7 +29,7 @@
       fstype: xfs
       force: True
       dev: "/dev/sd{{ dev_item }}1"
-  - name: Mount a filesystem
+  - name: Mount a filesystem /mnt/disk_{{ dev_item }}
     mount:
       path: "/mnt/disk_{{ dev_item }}"
       src: "/dev/sd{{ dev_item }}1"

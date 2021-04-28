@@ -5,15 +5,15 @@
   vars_files:
     - gagarin_bmc
   tasks:
-  - name: Update existing packages to their latest versions
-    yum:
-      name: '*'
-      state: latest
+#  - name: Update existing packages to their latest versions
+#    yum:
+#      name: '*'
+#      state: latest
   - name: Install EPEL repo
     yum:
       name: epel-release 
       state: latest
-    when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat'
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
   - name: Install basic system utilities and tests with prerequisites
     yum:
       name: "{{ item }}"
