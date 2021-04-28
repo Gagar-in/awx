@@ -17,6 +17,7 @@
     register: cpu_result
   - ansible.builtin.debug:
       msg: "{{ cpu_result.redfish_facts.cpu.entries | to_nice_json }}"
+    when: False
   - name: Get Memory information
     community.general.redfish_info:
       category: Systems
@@ -27,6 +28,7 @@
     register: mem_result
   - ansible.builtin.debug:
       msg: "{{ mem_result.redfish_facts.memory.entries | to_nice_json }}"
+    when: False
   - name: Get default inventory information
     community.general.redfish_info:
       baseuri: "{{ ip }}"
@@ -35,6 +37,7 @@
     register: gen_result
   - ansible.builtin.debug:
       msg: "{{ gen_result.redfish_facts | to_nice_json }}"
+    when: False
   - name: Output summary
     template:
       src: summary.j2
