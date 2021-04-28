@@ -22,10 +22,10 @@
       baseuri: "{{ ip }}"
       username: "{{ username }}"
       password: "{{ password }}"
-  - name: Restart system power forcefully
+  - name: Restart system power gracefully
     community.general.redfish_command:
       category: Systems
-      command: PowerForceRestart
+      command: PowerGracefulRestart
       baseuri: "{{ ip }}"
       username: "{{ username }}"
       password: "{{ password }}"

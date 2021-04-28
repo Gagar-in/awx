@@ -42,4 +42,4 @@
     template:
       src: summary.j2
       dest: "/tmp/{{ inventory_hostname }}.txt"
-
+      force: True

@@ -23,11 +23,16 @@
     when: False
   - name: Run async Geekbench v5 test
     command: 
-      cmd: ./geekbench_x86_64 --save gb_report.txt --export-html /var/www/html/geekbench.html --no-upload
+      cmd: ./geekbench_x86_64 --export-text gb_report.txt --export-html /var/www/html/geekbench.html --export-json gb_report.json --no-upload
       chdir: /opt/tests/Geekbench-5.4.0-Linux
       creates: gb_report.txt
     async: 600
     poll: 15
+  - name: Fetching Geekbench v5 results
+    ansible.builtin.fetch:
+      src: /opt/tests/Geekbench-5.4.0-Linux/gb_report.txt
+      dest: /tmp/{{ inventory_hostname }}_gb5_report.txt
+      flat: yes
   - name: Run Sysbench memory test
     shell: 
       cmd: sysbench memory run | tee sysbench.txt
