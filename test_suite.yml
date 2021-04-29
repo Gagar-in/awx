@@ -36,7 +36,8 @@
       - unzip
       - tar
       - vim-enhanced
-      - httpd
+      - pcp
+      - pcp-system-tools
   - name: Install Python expect module for CentOS 7
     yum: 
       name: pexpect 
