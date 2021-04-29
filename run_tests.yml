@@ -38,11 +38,16 @@
       chdir: /opt/tests/Geekbench-5.4.0-Linux
       creates: gb_report.txt
     async: 600
-    poll: 15
+    poll: 5
   - name: Fetching Geekbench v5 results
     ansible.builtin.fetch:
       src: /opt/tests/Geekbench-5.4.0-Linux/gb_report.txt
       dest: /tmp/{{ board_id.stdout }}/gb5_report.txt
+      flat: yes
+  - name: Fetching Geekbench v5 results in JSON
+    ansible.builtin.fetch:
+      src: /opt/tests/Geekbench-5.4.0-Linux/gb_report.json
+      dest: /tmp/{{ board_id.stdout }}/gb5_report.json
       flat: yes
   - name: Run Sysbench memory test
     shell: 
@@ -51,14 +56,51 @@
       creates: sysbench.txt
     async: 60
     poll: 5
+  - name: Fetching Sysbench results
+    ansible.builtin.fetch:
+      src: /opt/tests/sysbench.txt
+      dest: /tmp/{{ board_id.stdout }}/sysbench.txt
+      flat: yes
   - name: Run Iperf3 network test
     shell: 
       cmd: iperf3 -i 10 -w 100K -t 60 -c "{{ test_ip }}" | tee iperf3.txt
-      chdir: /home/ansible/tests
+      chdir: /opt/tests
       creates: iperf3.txt
     async: 90
     poll: 5
     when: False
+  - name: Get dmidecode info
+    shell:
+      cmd: dmidecode -t processor -t memory > dmidecode.txt
+      chdir: /opt/tests
+      creates: dmidecode.txt
+  - name: Fetching dmidecode info
+    ansible.builtin.fetch:
+      src: /opt/tests/dmidecode.txt
+      dest: /tmp/{{ board_id.stdout }}/dmidecode.txt
+      flat: yes
+  - name: Get block device info
+    shell:
+      cmd: lsblk --output NAME,MODEL,SIZE,SERIAL -P > lsblk.txt
+      chdir: /opt/tests
+      creates: lsblk.txt
+  - name: Fetching block device info
+    ansible.builtin.fetch:
+      src: /opt/tests/lsblk.txt
+      dest: /tmp/{{ board_id.stdout }}/lsblk.txt
+      flat: yes
+  - name: Run FIO tests
+    shell:
+      cmd: fio --minimal --output fio.json --output-format=json fio_?.ini
+      chdir: /opt/tests
+      creates: fio.json
+    async: 90
+    poll: 5
+  - name: Fetching FIO results
+    ansible.builtin.fetch:
+      src: /opt/tests/fio.json
+      dest: /tmp/{{ board_id.stdout }}/fio.json
+      flat: yes
   - name: Enable and start Apache to show report
     systemd:
       name: httpd
