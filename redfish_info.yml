@@ -38,8 +38,12 @@
   - ansible.builtin.debug:
       msg: "{{ gen_result.redfish_facts | to_nice_json }}"
     when: False
-  - name: Output summary
+  - name: Create output directory
+    file:
+      path: /tmp/{{ gen_result.redfish_facts.system.entries.0.1.SerialNumber }}
+      state: directory
+  - name: Output inventory summary
     template:
       src: summary.j2
-      dest: "/tmp/{{ inventory_hostname }}.txt"
+      dest: "/tmp/{{ gen_result.redfish_facts.system.entries.0.1.SerialNumber }}/inventory.txt"
       force: True

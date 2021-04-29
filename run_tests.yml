@@ -5,6 +5,17 @@
   vars_files:
     - gagarin_bmc
   tasks:
+  - name: Get system board information
+    shell:
+      cmd: dmidecode -H 0x0002 | grep Serial | awk '{print $3}'
+    register: board_id
+  - ansible.builtin.debug:
+      msg: "Board ID {{ board_id.stdout }}"
+    when: False
+  - name: Create output directory
+    file:
+      path: /tmp/{{ board_id.stdout }}
+      state: directory
   - name: Run async Linpack test
     command: 
       cmd: ./runme_xeon64
@@ -31,7 +42,7 @@
   - name: Fetching Geekbench v5 results
     ansible.builtin.fetch:
       src: /opt/tests/Geekbench-5.4.0-Linux/gb_report.txt
-      dest: /tmp/{{ inventory_hostname }}_gb5_report.txt
+      dest: /tmp/{{ board_id.stdout }}/gb5_report.txt
       flat: yes
   - name: Run Sysbench memory test
     shell: 

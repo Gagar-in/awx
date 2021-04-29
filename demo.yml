@@ -1,10 +1,16 @@
 ---
 - name: Demo playbook
   hosts: hosts
-  become: False
+  become: True
   gather_facts: False
   vars_files:
     - gagarin_bmc
   tasks:
   - ansible.builtin.debug:
-      msg: "Demo message {{ gb_user }}"
+      msg: "Demo message {{ gb5_user }}"
+  - name: Get board information
+    shell:
+      cmd: dmidecode -H 0x0002 | grep Serial | awk '{print $3}'
+    register: board_id
+  - ansible.builtin.debug:
+      msg: "Board ID {{ board_id.stdout }}"
