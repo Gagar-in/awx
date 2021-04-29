@@ -94,7 +94,7 @@
       cmd: fio --minimal --output fio.json --output-format=json fio_?.ini
       chdir: /opt/tests
       creates: fio.json
-    async: 90
+    async: 300
     poll: 5
   - name: Fetching FIO results
     ansible.builtin.fetch:
