@@ -1,12 +1,12 @@
 ---
 - block:
+  - name: Read "/dev/sd{{ dev_item }}" partitions information
+    parted: device="/dev/sd{{ dev_item }}" unit=MiB
+    register: "part_info" 
   - name: Unmount a mounted volume /mnt/disk_{{ dev_item }}
     mount:
       path: "/mnt/disk_{{ dev_item }}"
       state: unmounted
-  - name: Read "/dev/sd{{ dev_item }}" partitions information
-    parted: device="/dev/sd{{ dev_item }}" unit=MiB
-    register: "part_info" 
   - name: Remove all partitions from "/dev/sd{{ dev_item }}"
     parted:
       device: "/dev/sd{{ dev_item }}"
