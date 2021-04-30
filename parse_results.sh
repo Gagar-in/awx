@@ -23,7 +23,7 @@ for brd in `ls -d ????-????-????`; do
 
   # FIO tests
   echo "################ FIO ###########"
-  cat $brd/fio.json | jq '.jobs[].read.iops, .jobs[].read.slat_ns.mean, .jobs[].write.iops, .jobs[].write.slat_ns.mean'
+  cat $brd/fio.json | jq '.jobs[].read.iops, .jobs[].read.lat_ns.mean, .jobs[].write.iops, .jobs[].write.lat_ns.mean'
 
   # sysbench
   echo "############# Sysbench ###################"
