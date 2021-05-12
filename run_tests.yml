@@ -3,7 +3,7 @@
   hosts: hosts
   become: True
   vars_files:
-    - gagarin_bmc
+    - gagarin_vault
   tasks:
   - name: Get system board information
     shell:

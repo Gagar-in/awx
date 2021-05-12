@@ -3,7 +3,7 @@
   hosts: hosts
   become: True
   vars_files:
-    - gagarin_bmc
+    - gagarin_vault
   tasks:
 #  - name: Update existing packages to their latest versions
 #    yum:
@@ -114,7 +114,7 @@
   - name: Prepare partitions for FIO tests
     include_tasks: disk.yml
     loop:
-      - a
+#      - a
       - b
       - c
       - d

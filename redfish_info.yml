@@ -5,7 +5,7 @@
   become: False
   gather_facts: False
   vars_files:
-    - gagarin_bmc
+    - gagarin_vault
   tasks:
   - name: Get CPU inventory
     community.general.redfish_info:

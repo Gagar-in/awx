@@ -6,7 +6,7 @@
     - name: Prepare all available devices
       include_tasks: disk.yml
       loop:
-        - a
+#        - a
         - b
         - c
         - d

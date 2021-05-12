@@ -3,7 +3,7 @@
   hosts: hosts
   become: True
   vars_files:
-    - gagarin_bmc
+    - gagarin_vault
   roles:
      - role: community.zabbix.zabbix_agent
        zabbix_agent_server: 192.168.88.6
