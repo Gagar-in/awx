@@ -22,6 +22,13 @@
       baseuri: "{{ ip }}"
       username: "{{ username }}"
       password: "{{ password }}"
+  - name: Get current boot override again
+    community.general.redfish_info:
+      category: Systems
+      command: GetBootOverride
+      baseuri: "{{ ip }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
   - name: Restart system power gracefully
     community.general.redfish_command:
       category: Systems
