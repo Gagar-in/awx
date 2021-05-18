@@ -1,0 +1,19 @@
+---
+- name: Create special user for ZABBIX monitoring
+  hosts: bmcs
+  remote_user: root
+  become: False
+  gather_facts: False
+  vars_files:
+    - gagarin_vault
+  tasks:
+  - name: Add and enable ZABBIX user
+    community.general.redfish_command:
+      category: Accounts
+      command: AddUser,EnableUser
+      baseuri: "{{ ip }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      new_username: "{{ zabbix_user}}"
+      new_password: "{{ zabbix_pass}}"
+      roleid: "{{ zabbix_roleid }}"
