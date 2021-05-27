@@ -96,6 +96,7 @@
       creates: fio.json
     async: 300
     poll: 5
+    ignore_errors: True   
   - name: Fetching FIO results
     ansible.builtin.fetch:
       src: /opt/tests/fio.json
