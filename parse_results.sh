@@ -11,7 +11,7 @@ for brd in `ls -d ????-????-????`; do
   echo -e "######################################\n########## $brd ############\n######################################\n$PROC\n$MEM_TTL"
 
   # Show memory part numbers
-  cat $brd/dmidecode.txt | grep Part\ Number | grep -v Not\ Specified 
+  cat $brd/dmidecode.txt | egrep "Size|Part\ Number" | grep -v Not\ Specified 
   
   # get disk info
   echo "############# Disks ###################"
