@@ -15,14 +15,13 @@
       state: latest
     when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
   - name: Install basic system utilities and tests with prerequisites
-    yum:
+    package:
       name: "{{ item }}"
       state: present
     loop:
       - usbutils
       - pciutils
       - dmidecode
-      - lm_sensors
       - sysbench
       - iperf3
       - stress-ng
@@ -35,21 +34,35 @@
       - expect
       - unzip
       - tar
-      - vim-enhanced
       - pcp
+  - name: Install basic system utilities and tests with prerequisites (yum)
+    yum:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - lm_sensors
+      - vim-enhanced
       - pcp-system-tools
+    when: ansible_os_family == "RedHat"
+  - name: Install basic system utilities and tests with prerequisites (apt)
+    apt:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - lm-sensors
+      - xfsprogs
+    when: ansible_os_family == "Debian"
+  - name: Install Python expect module
+    yum:
+      name: python3-pexpect 
+      state: present
+    when: 
+      - (ansible_distribution == 'CentOS' and ansible_distribution_major_version == '8') or ansible_distribution == 'Fedora' or ansible_os_family == "Debian"
   - name: Install Python expect module for CentOS 7
     yum: 
       name: pexpect 
       state: present
     when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'
-    tags: pexpect
-  - name: Install Python expect module for CentOS 8 and Fedora
-    yum:
-      name: python3-pexpect 
-      state: present
-    when: 
-      - (ansible_distribution == 'CentOS' and ansible_distribution_major_version == '8') or ansible_distribution == 'Fedora'
     tags: pexpect
   - name: Create tests directory
     file:
@@ -114,7 +127,7 @@
   - name: Prepare partitions for FIO tests
     include_tasks: disk.yml
     loop:
-      - a
+#      - a
       - b
       - c
       - d

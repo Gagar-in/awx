@@ -94,7 +94,7 @@
       cmd: fio --minimal --output fio.json --output-format=json fio_?.ini
       chdir: /opt/tests
       creates: fio.json
-    async: 300
+    async: 1000
     poll: 5
     ignore_errors: True   
   - name: Fetching FIO results
