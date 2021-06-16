@@ -1,0 +1,31 @@
+---
+- name: Install basic packages and utilities and prepare test environment
+  hosts: hosts
+  become: True
+  vars_files:
+    - gagarin_vault
+  tasks:
+  - name: Create UEFI directory
+    file:
+      path: /opt/UEFI
+      state: directory
+      owner: ansible
+      group: ansible
+  - name: Fetching FlashTools
+    unarchive:
+      src: "http://{{ data_ip }}/UEFI/FlashTools.zip"
+      remote_src: yes
+      dest: /opt/UEFI
+      owner: ansible
+      group: ansible
+  - name: Fetching UEFI image file
+    get_url:
+      url: "http://{{ data_ip }}/UEFI/{{ UEFI_image | default('latest') }}"
+      dest: "/opt/UEFI/image.bin"
+      owner: ansible
+      group: ansible
+      force: yes
+  - name: Flashing UEFI
+    command: 
+      cmd: FlashTools/RELEASE/LinFlash64 -p -sd -exit -file image.bin
+      chdir: /opt/UEFI
