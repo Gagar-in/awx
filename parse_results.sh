@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-RESULTS_DIR=/tmp
+RESULTS_DIR=/opt/awx/reports
 cd $RESULTS_DIR
 
 for brd in `ls -d ????-????-????`; do

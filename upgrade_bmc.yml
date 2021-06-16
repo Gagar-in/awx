@@ -10,5 +10,5 @@
   - name: Simple update with curl
     shell:
       cmd: |
-        curl -s -k -H "Content-Type: application/octet-stream" -X POST -T "/var/www/html/BMC/{{ BMC_tar | default('latest') }}" "https://{{ username }}:{{ password }}@{{ ip }}/redfish/v1/UpdateService"
+        curl -s -k -H "Content-Type: application/octet-stream" -X POST -T "/opt/awx/BMC/{{ BMC_tar | default('latest') }}" "https://{{ username }}:{{ password }}@{{ ip }}/redfish/v1/UpdateService"
     ignore_errors: True

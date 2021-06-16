@@ -14,7 +14,7 @@
     when: False
   - name: Create output directory
     file:
-      path: /tmp/{{ board_id.stdout }}
+      path: /opt/awx/{{ board_id.stdout }}
       state: directory
   - name: Run async Linpack test
     command: 
@@ -42,12 +42,12 @@
   - name: Fetching Geekbench v5 results
     ansible.builtin.fetch:
       src: /opt/tests/Geekbench-5.4.0-Linux/gb_report.txt
-      dest: /tmp/{{ board_id.stdout }}/gb5_report.txt
+      dest: /opt/awx/{{ board_id.stdout }}/gb5_report.txt
       flat: yes
   - name: Fetching Geekbench v5 results in JSON
     ansible.builtin.fetch:
       src: /opt/tests/Geekbench-5.4.0-Linux/gb_report.json
-      dest: /tmp/{{ board_id.stdout }}/gb5_report.json
+      dest: /opt/awx/{{ board_id.stdout }}/gb5_report.json
       flat: yes
   - name: Run Sysbench memory test
     shell: 
@@ -59,7 +59,7 @@
   - name: Fetching Sysbench results
     ansible.builtin.fetch:
       src: /opt/tests/sysbench.txt
-      dest: /tmp/{{ board_id.stdout }}/sysbench.txt
+      dest: /opt/awx/{{ board_id.stdout }}/sysbench.txt
       flat: yes
   - name: Run Iperf3 network test
     shell: 
@@ -77,7 +77,7 @@
   - name: Fetching dmidecode info
     ansible.builtin.fetch:
       src: /opt/tests/dmidecode.txt
-      dest: /tmp/{{ board_id.stdout }}/dmidecode.txt
+      dest: /opt/awx/{{ board_id.stdout }}/dmidecode.txt
       flat: yes
   - name: Get block device info
     shell:
@@ -87,7 +87,7 @@
   - name: Fetching block device info
     ansible.builtin.fetch:
       src: /opt/tests/lsblk.txt
-      dest: /tmp/{{ board_id.stdout }}/lsblk.txt
+      dest: /opt/awx/{{ board_id.stdout }}/lsblk.txt
       flat: yes
   - name: Run FIO tests
     shell:
@@ -100,7 +100,7 @@
   - name: Fetching FIO results
     ansible.builtin.fetch:
       src: /opt/tests/fio.json
-      dest: /tmp/{{ board_id.stdout }}/fio.json
+      dest: /opt/awx/{{ board_id.stdout }}/fio.json
       flat: yes
   - name: Enable and start Apache to show report
     systemd:

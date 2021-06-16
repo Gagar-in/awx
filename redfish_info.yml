@@ -40,10 +40,10 @@
     when: False
   - name: Create output directory
     file:
-      path: /tmp/{{ gen_result.redfish_facts.system.entries.0.1.SerialNumber }}
+      path: /opt/awx/reports/{{ gen_result.redfish_facts.system.entries.0.1.SerialNumber }}
       state: directory
   - name: Output inventory summary
     template:
       src: summary.j2
-      dest: "/tmp/{{ gen_result.redfish_facts.system.entries.0.1.SerialNumber }}/inventory.txt"
+      dest: "/opt/awx/reports/{{ gen_result.redfish_facts.system.entries.0.1.SerialNumber }}/inventory.txt"
       force: True
