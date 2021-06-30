@@ -1,0 +1,14 @@
+---
+- name: Get LLDP information from switches
+  hosts: switches
+  become: True
+  vars_files:
+    - gagarin_vault
+  tasks:
+   - name: Gather information from lldp
+     community.general.lldp:
+
+   - name: Print each switch/port
+     ansible.builtin.debug:
+       msg: "{{ lldp[item]['chassis']['name'] | default('unknown') }} / {{ lldp[item]['port']['descr'] | default('unknown') }} ({{ lldp[item]['port']['mac'] | default('unknown') }}) is station: {{ lldp[item]['chassis']['Station']['enabled'] | default('off') }} / {{ lldp[item]['chassis']['descr'] | default('unknown') }}"
+     loop: "{{ lldp.keys() | flatten(levels=1) }}"
