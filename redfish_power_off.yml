@@ -1,0 +1,16 @@
+---
+- name: Send Redfish command to power off the server
+  hosts: bmcs
+  remote_user: root
+  become: False
+  gather_facts: False
+  vars_files:
+    - gagarin_vault
+  tasks:
+  - name: Power off the system gracefully
+    community.general.redfish_command:
+      category: Systems
+      command: PowerGracefulShutdown
+      baseuri: "{{ ip }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
