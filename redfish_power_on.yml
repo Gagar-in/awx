@@ -1,0 +1,16 @@
+---
+- name: Send Redfish command to power on the server
+  hosts: bmcs
+  remote_user: root
+  become: False
+  gather_facts: False
+  vars_files:
+    - gagarin_vault
+  tasks:
+  - name: Power on the system
+    community.general.redfish_command:
+      category: Systems
+      command: PowerOn
+      baseuri: "{{ ip }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
