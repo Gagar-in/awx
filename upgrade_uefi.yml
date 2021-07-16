@@ -1,10 +1,16 @@
 ---
-- name: Install basic packages and utilities and prepare test environment
+- name: Perform UEFI flashing via OS
   hosts: hosts
   become: True
   vars_files:
     - gagarin_vault
   tasks:
+  - name: Install unzip package
+    package:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - unzip
   - name: Create UEFI directory
     file:
       path: /opt/UEFI
