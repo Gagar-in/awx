@@ -26,18 +26,18 @@
     when: False
   - name: Run async Geekbench v3 test
     command: 
-      cmd: ./geekbench_x86_64 --save gb_report.txt --export-html /var/www/html/geekbench.html --no-upload
+      cmd: ./geekbench_x86_64 --save gb_report.txt --export-html /var/www/html/geekbench.html --no-upload --iterations 10
       chdir: /opt/tests/dist/Geekbench-3.4.2-Linux
       creates: gb_report.txt
-    async: 600
+    async: 900
     poll: 15
     when: False
   - name: Run async Geekbench v5 test
     command: 
-      cmd: ./geekbench_x86_64 --export-text gb_report.txt --export-html /var/www/html/geekbench.html --export-json gb_report.json --no-upload
+      cmd: ./geekbench_x86_64 --export-text gb_report.txt --export-html /var/www/html/geekbench.html --export-json gb_report.json --no-upload --iterations 10
       chdir: /opt/tests/Geekbench-5.4.0-Linux
       creates: gb_report.txt
-    async: 600
+    async: 900
     poll: 5
   - name: Fetching Geekbench v5 results
     ansible.builtin.fetch:
