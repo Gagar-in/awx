@@ -1,0 +1,14 @@
+---
+- name: Fetch inventory information from BMC and upload into GLPI
+  hosts: bmcs
+  remote_user: root
+  become: False
+  gather_facts: False
+  vars_files:
+    - gagarin_vault
+  tasks:
+  - name: Run python script
+    shell:
+      cmd: |
+        ./glpi.py -i "{{ ip }}"
+    ignore_errors: True

@@ -21,14 +21,14 @@
         baseuri: "{{ bmc_ip.stdout }}"
         username: "{{ username }}"
         password: "{{ password }}"
-        new_username: "{{ zabbix_user}}"
-        new_password: "{{ zabbix_pass}}"
+        new_username: "{{ zabbix_user }}"
+        new_password: "{{ zabbix_pass }}"
         roleid: "{{ zabbix_roleid }}"
   roles:
     - role: community.zabbix.zabbix_agent
-      zabbix_agent_server: 192.168.88.6
-      zabbix_agent_serveractive: 192.168.88.6
-      zabbix_url: http://172.18.1.8:8888/zabbix/
+      zabbix_agent_server: "{{ zabbix_host }}"
+      zabbix_agent_serveractive: "{{ zabbix_host }}"
+      zabbix_url: "{{ zabbix_url }}"
       zabbix_api_use: True # use zabbix_api_create_hosts and/or zabbix_api_create_hostgroup from 0.8.0
       zabbix_api_create_hosts: True
       zabbix_api_user: "{{ zabbix_admin_user }}"
