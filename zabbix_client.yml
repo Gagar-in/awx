@@ -28,7 +28,7 @@
     - role: community.zabbix.zabbix_agent
       zabbix_agent_server: "{{ zabbix_host }}"
       zabbix_agent_serveractive: "{{ zabbix_host }}"
-      zabbix_url: "{{ zabbix_url }}"
+      zabbix_url: "{{ zabbix_server_url }}"
       zabbix_api_use: True # use zabbix_api_create_hosts and/or zabbix_api_create_hostgroup from 0.8.0
       zabbix_api_create_hosts: True
       zabbix_api_user: "{{ zabbix_admin_user }}"
