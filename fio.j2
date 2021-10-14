@@ -1,14 +1,14 @@
 [test IOPS]
 blocksize=8k
 filename=/mnt/disk_{{ dev_item }}/tmp_file
-filesize=10G
+filesize=15G
 direct=1
 buffered=0
 ioengine=libaio
 iodepth=64
 rw=randrw
 rwmixwrite=30
-runtime=300
+runtime=180
 time_based=1
 clat_percentiles=0
 unlink=1
