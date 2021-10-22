@@ -17,6 +17,12 @@
       shell:
         cmd: ipmitool fru | grep Chassis\ Serial\  | awk '{ print $4}'
       register: chassis_serial
+    - name: Get Chassis MAC
+      shell:
+        cmd: ipmitool lan print | grep MAC\ Address\ \  | awk '{print $4}' | awk -F':' '{print $5$6}'
+      register: chassis_MAC
+    - debug:
+        msg: "host_{{ chassis_MAC.stdout }}"
     - name: Add and enable ZABBIX user on BMC
       local_action:
         module: community.general.redfish_command
@@ -32,7 +38,7 @@
     - role: community.zabbix.zabbix_agent
       zabbix_agent_server: "{{ zabbix_host }}"
       zabbix_agent_serveractive: "{{ zabbix_host }}"
-      zabbix_agent_hostname: "{{ chassis_serial.stdout }}"
+      zabbix_agent_hostname: "host_{{ chassis_MAC.stdout }}"
       zabbix_url: "{{ zabbix_server_url }}"
       zabbix_api_use: True # use zabbix_api_create_hosts and/or zabbix_api_create_hostgroup from 0.8.0
       zabbix_api_create_hosts: True
