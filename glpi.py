@@ -94,6 +94,7 @@ class DropDown( Item):
     super().__init__( Name, Type)
     logging.debug( 'DropDown class constructor')
     self.Name = Name
+    self.Name = Name
     self.Type = Type
 
     self.Id = super().searchGLPIbyName()
@@ -589,13 +590,18 @@ def main( argv):
     auth=( config["BMC"]["user"], config["BMC"]["pass"]), verify=False)
   chassis_json = chassis.json()
 
-  chassis_json["Manufacturer"] = "GAGAR.IN"			# Broken > sign encoding in GLPI search
   # chassis_json["PartNumber"] should be saved in a ComputerModel
 
   # Get System endpoint
   system = requests.get( 'https://' + ip + '/redfish/v1/Systems/system', 
     auth=( config["BMC"]["user"], config["BMC"]["pass"]), verify=False)
   system_json = system.json()
+
+  # Get BMC eth1 endpoint in order to generate server name
+  eth1 = requests.get( 'https://' + ip + '/redfish/v1/Managers/bmc/EthernetInterfaces/eth1',
+    auth=( config["BMC"]["user"], config["BMC"]["pass"]), verify=False)
+  eth1_json = eth1.json()
+  #eth1_json["MACAddress"]
 
   t = TiogaPassServer( chassis_json["SerialNumber"], chassis_json["Manufacturer"], chassis_json["ChassisType"], 
     chassis_json["Model"], chassis_json["SerialNumber"], system_json["UUID"])
